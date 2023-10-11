@@ -52,7 +52,6 @@ public class IssuersServiceTest {
                 ServiceConfiguration serviceConfiguration = new ServiceConfiguration();
                 serviceConfiguration.setAuthorizationEndpoint("/authorization");
                 serviceConfiguration.setTokenEndpoint("/token");
-                serviceConfiguration.setRevocationEndpoint("/revocation");
                 issuer.setServiceConfiguration(serviceConfiguration);
             }
             if (!nullFields.contains("additionalHeaders"))

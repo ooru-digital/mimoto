@@ -149,7 +149,7 @@ public class JoseUtil {
         Map<String, Object> header = new HashMap<>();
         header.put("alg", "RS256");
 
-        String keyStorePathWithFileName = keyStorePath + "/" + fileName;
+        String keyStorePathWithFileName = keyStorePath + fileName;
         KeyStore.PrivateKeyEntry privateKeyEntry= null;
         try {
             privateKeyEntry = cryptoCoreUtil.loadP12(keyStorePathWithFileName, alias, cyptoPassword);

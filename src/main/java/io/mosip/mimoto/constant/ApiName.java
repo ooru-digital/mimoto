@@ -111,6 +111,5 @@ public enum ApiName {
     IDP_CONSENT,
     IDP_OTP,
     BINDING_OTP,
-    WALLET_BINDING,
-    GET_TOKEN
+    WALLET_BINDING
 }

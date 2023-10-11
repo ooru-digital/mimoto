@@ -50,9 +50,6 @@ public class IdpController {
     @Value("${mosip.oidc.esignet.token.endpoint}")
     String getTokenEndpoint;
 
-//    @Value("${GET_TOKEN}")
-//    String getTokenUrl;
-
     @Autowired
     IdpService idpService;
 
@@ -113,7 +110,7 @@ public class IdpController {
 
     @PostMapping(value = "/get-token", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public ResponseEntity getToken(@RequestParam Map<String, String> params) {
-        logger.info("\n\n\n Started Token Call get-token-> " + params.toString());
+        logger.info("Started Token Call get-token-> " + params.toString());
         RestTemplate restTemplate = new RestTemplate();
         try {
             HttpEntity<MultiValueMap<String, String>> request = idpService.constructGetTokenRequest(params);
