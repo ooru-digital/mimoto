@@ -86,17 +86,17 @@ public class CryptoCoreUtil {
     public PrivateKeyEntry loadP12(String fileName, String alias, String cyptoPassword) throws IOException {
         PrivateKeyEntry privateKeyEntry = null;
         InputStream keystoreResourceStream = null;
-        logger.info("loadP12 : alias: ", alias);
-        logger.info("loadP12 : cyptoPassword: ", cyptoPassword);
+        logger.info("loadP12 : alias: " +  alias);
+        logger.info("loadP12 : cyptoPassword: "+ cyptoPassword);
         try {
             KeyStore mosipKeyStore = KeyStore.getInstance("PKCS12");
             // Try to get partner keystore from resource.
             keystoreResourceStream = getClass().getClassLoader().getResourceAsStream(fileName);
             if (keystoreResourceStream == null) {
                 // Try to get external partner keystore
-                logger.info("loadP12 : File Name: ", fileName);
+                logger.info("loadP12 : File Name: "+ fileName);
                 keystoreResourceStream = Files.newInputStream(Paths.get(fileName));
-                logger.info("loadP12 : keystoreResourceStream: ", keystoreResourceStream);
+                logger.info("loadP12 : keystoreResourceStream: "+ keystoreResourceStream);
             }
             mosipKeyStore.load(keystoreResourceStream, cyptoPassword.toCharArray());
             ProtectionParameter password = new PasswordProtection(cyptoPassword.toCharArray());
