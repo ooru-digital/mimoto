@@ -40,6 +40,7 @@ public class JoseUtil {
     private final Logger logger = LoggerUtil.getLogger(JoseUtil.class);
     private static final String BEGIN_KEY = "-----BEGIN PUBLIC KEY-----";
     private static final String END_KEY = "-----END PUBLIC KEY-----";
+    private static final String ALG_RS256 = "RS256";
 
     @Autowired
     private ObjectMapper mapper;
@@ -147,9 +148,11 @@ public class JoseUtil {
     public String getJWT(String clientId) {
 
         Map<String, Object> header = new HashMap<>();
-        header.put("alg", "RS256");
+        header.put("alg", ALG_RS256);
 
         String keyStorePathWithFileName = keyStorePath + fileName;
+        Date issuedAt = Date.from(Instant.now());
+        Date expiresAt = Date.from(Instant.now().plusMillis(120000));
         KeyStore.PrivateKeyEntry privateKeyEntry= null;
         try {
             privateKeyEntry = cryptoCoreUtil.loadP12(keyStorePathWithFileName, alias, cyptoPassword);
@@ -162,8 +165,8 @@ public class JoseUtil {
                 .withIssuer(clientId)
                 .withSubject(clientId)
                 .withAudience(audience)
-                .withExpiresAt(Date.from(Instant.now().plusMillis(120000)))
-                .withIssuedAt(Date.from(Instant.now()))
+                .withExpiresAt(expiresAt)
+                .withIssuedAt(issuedAt)
                 .sign(Algorithm.RSA256(null, privateKey));
     }
 }
