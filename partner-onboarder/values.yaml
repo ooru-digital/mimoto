@@ -22,4 +22,3 @@ onboarding:
       enabled: true
     - name: mimoto-oidc
       enabled: true
-    

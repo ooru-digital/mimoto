@@ -461,3 +461,9 @@ istio:
   rewrite: /v1/mimoto
 
 enable_insecure: false
+
+volumes:
+  secrets:
+    mimotooidc:
+      key: oidckeystore.p12
+      path: /home/mosip/certs

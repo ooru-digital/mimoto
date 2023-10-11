@@ -5,12 +5,14 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import io.mosip.kernel.core.logger.spi.Logger;
 import io.mosip.kernel.core.util.JsonUtils;
+import io.mosip.kernel.core.util.exception.JsonProcessingException;
 import io.mosip.mimoto.constant.ApiName;
 import io.mosip.mimoto.core.http.ResponseWrapper;
 import io.mosip.mimoto.dto.ErrorDTO;
 import io.mosip.mimoto.dto.idp.TokenResponseDTO;
 import io.mosip.mimoto.dto.mimoto.*;
 import io.mosip.mimoto.exception.IdpException;
+import io.mosip.mimoto.exception.InvalidInputException;
 import io.mosip.mimoto.exception.PlatformErrorMessages;
 import io.mosip.mimoto.service.IdpService;
 import io.mosip.mimoto.service.RestClientService;
@@ -31,7 +33,7 @@ import java.util.Map;
 public class IdpController {
 
     private final Logger logger = LoggerUtil.getLogger(IdpController.class);
-    private static final boolean useBearerToken = true;
+    private static final boolean USE_BEARER_TOKEN = true;
     private static final String ID = "mosip.mimoto.idp";
     private Gson gson = new Gson();
 
@@ -63,7 +65,7 @@ public class IdpController {
         try {
             response = (ResponseWrapper<BindingOtpResponseDto>) restClientService
                     .postApi(ApiName.BINDING_OTP,
-                            requestDTO, ResponseWrapper.class, useBearerToken);
+                            requestDTO, ResponseWrapper.class, USE_BEARER_TOKEN);
             if (response == null)
                 throw new IdpException();
 
@@ -93,7 +95,7 @@ public class IdpController {
 
             ResponseWrapper<WalletBindingInternalResponseDto> internalResponse = (ResponseWrapper<WalletBindingInternalResponseDto>) restClientService
                     .postApi(ApiName.WALLET_BINDING,
-                            req, ResponseWrapper.class, useBearerToken);
+                            req, ResponseWrapper.class, USE_BEARER_TOKEN);
 
             if (internalResponse == null)
                 throw new IdpException();
