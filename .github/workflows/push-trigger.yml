@@ -21,6 +21,7 @@ on:
       - develop*
       - MOSIP*
       - qa-develop
+      - download-different-issuer-vc
 
 jobs:
   build-mimoto:
