@@ -42,6 +42,12 @@ public class IdpController {
     private JoseUtil joseUtil;
 
     @Autowired
+    private IdpMockServiceImpl idpMockServiceImpl;
+
+    @Autowired
+    private IdpServiceImpl idpServiceImpl;
+
+    @Autowired
     RequestValidator requestValidator;
     @PostMapping("/binding-otp")
     @SuppressWarnings("unchecked")
@@ -103,7 +109,7 @@ public class IdpController {
         logger.debug("Started Token Call get-token-> " + params.toString());
         RestTemplate restTemplate = new RestTemplate();
         try {
-            IdpService idpService = "mock".equals(issuer) ? new IdpMockServiceImpl() : new IdpServiceImpl();
+            IdpService idpService = "mock".equals(issuer) ? idpMockServiceImpl : idpServiceImpl;
             HttpEntity<MultiValueMap<String, String>> request = idpService.constructGetTokenRequest(params);
             TokenResponseDTO response = restTemplate.postForObject(idpService.getTokenEndpoint(), request, TokenResponseDTO.class);
             return ResponseEntity.status(HttpStatus.OK).body(response);
