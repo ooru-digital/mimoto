@@ -1,7 +1,9 @@
 package io.mosip.mimoto.service.impl;
 
+import io.mosip.kernel.core.logger.spi.Logger;
 import io.mosip.mimoto.service.IdpService;
 import io.mosip.mimoto.util.JoseUtil;
+import io.mosip.mimoto.util.LoggerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -43,10 +45,19 @@ public class IdpMockServiceImpl implements IdpService {
     @Autowired
     JoseUtil joseUtil;
 
+    static Logger logger = LoggerUtil.getLogger(IdpMockServiceImpl.class);
+
     @Override
     public HttpEntity<MultiValueMap<String, String>> constructGetTokenRequest(Map<String, String> params) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        logger.info("ClientId = {} ", clientId);
+        logger.info("keyStorePath = {} ", keyStorePath);
+        logger.info("fileName = {}", fileName);
+        logger.info("alias = {}", alias);
+        logger.info("cyptoPassword = {}", cyptoPassword);
+        logger.info("audience = {}", audience);
 
         String clientAssertion = joseUtil.getJWT(clientId, keyStorePath, fileName, alias, cyptoPassword, audience);
 

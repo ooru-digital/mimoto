@@ -140,11 +140,15 @@ public class JoseUtil {
         Date expiresAt = Date.from(Instant.now().plusMillis(120000));
         KeyStore.PrivateKeyEntry privateKeyEntry= null;
         try {
+            logger.info("Came to fetch the p12 file with alias" + alias);
             privateKeyEntry = cryptoCoreUtil.loadP12(keyStorePathWithFileName, alias, cyptoPassword);
+            logger.info("fetched the p12 file and here is the privateKeyEntry " + privateKeyEntry);
         } catch (IOException e) {
            logger.error("Exception happened while loading the p12 file for invoking token call.");
         }
+        logger.info("came here before getting privateKey");
         RSAPrivateKey privateKey = (RSAPrivateKey) privateKeyEntry.getPrivateKey();
+        logger.info("came here after getting privateKey");
         return JWT.create()
                 .withHeader(header)
                 .withIssuer(clientId)
