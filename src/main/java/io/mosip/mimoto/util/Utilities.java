@@ -35,6 +35,12 @@ import io.mosip.mimoto.service.RestClientService;
 import io.mosip.mimoto.service.impl.CredentialShareServiceImpl;
 import lombok.Data;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 @Component
 @Data
 public class Utilities {
@@ -112,9 +118,9 @@ public class Utilities {
     private String issuersConfigJsonString = null;
 
 //    uncomment for running mimoto Locally to populate the issuers json
-//    public Utilities(@Value("classpath:mimoto-issuers-config.json") Resource resource) throws IOException {
-//        issuersConfigJsonString = (Files.readString(resource.getFile().toPath()));
-//    }
+    /*public Utilities(@Value("classpath:mimoto-issuers-config.json") Resource resource) throws IOException {
+        issuersConfigJsonString = (Files.readString(resource.getFile().toPath()));
+    }*/
 
     public JSONObject getTemplate() throws JsonParseException, JsonMappingException, IOException {
         return objectMapper.readValue(classLoader.getResourceAsStream(defaultTemplate), JSONObject.class);
@@ -179,9 +185,27 @@ public class Utilities {
     public String getJson(String configServerFileStorageURL, String uri) {
         String json = null;
         try {
-            json = restApiClient.getApi(URI.create(configServerFileStorageURL + uri), String.class);
-        } catch (Exception e) {
-            logger.error(ExceptionUtils.getStackTrace(e));
+            URL apiUrl = new URL(configServerFileStorageURL+uri);
+            HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Accept", "application/json");
+
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+                json = response.toString();
+            } else {
+                // Handle non-OK response codes
+                System.out.println("Failed to retrieve JSON. HTTP error code: " + connection.getResponseCode());
+            }
+            connection.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return json;
     }
