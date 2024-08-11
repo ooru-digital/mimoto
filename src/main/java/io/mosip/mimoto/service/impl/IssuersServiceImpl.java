@@ -1,5 +1,6 @@
 package io.mosip.mimoto.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.itextpdf.html2pdf.ConverterProperties;
@@ -144,7 +145,59 @@ public class IssuersServiceImpl implements IssuersService {
             IssuerDTO issuerDto = issuerConfigResp.get();
 
             // Get credential supported types from well known endpoint
-            CredentialIssuerWellKnownResponse response = restApiClient.getApi(issuerDto.getWellKnownEndpoint(), CredentialIssuerWellKnownResponse.class);
+            //CredentialIssuerWellKnownResponse response = restApiClient.getApi(issuerDto.getWellKnownEndpoint(), CredentialIssuerWellKnownResponse.class);
+            String jsonResponse = "{\n" +
+                    "  \"credential_issuer\": \"http://localhost:8088\",\n" +
+                    "  \"credential_endpoint\": \"http://localhost:8088/v1/esignet/vci/credential\",\n" +
+                    "  \"credentials_supported\": [\n" +
+                    "    {\n" +
+                    "      \"format\": \"ldp_vc\",\n" +
+                    "      \"id\": \"MockVerifiableCredential_ldp\",\n" +
+                    "      \"scope\": \"mock_identity_vc_ldp\",\n" +
+                    "      \"proof_types_supported\": [\n" +
+                    "        \"jwt\"\n" +
+                    "      ],\n" +
+                    "      \"credential_definition\": {\n" +
+                    "        \"type\": [\n" +
+                    "          \"VerifiableCredential\",\n" +
+                    "          \"MockVerifiableCredential\"\n" +
+                    "        ],\n" +
+                    "        \"credentialSubject\": {\n" +
+                    "          \"name\": {\n" +
+                    "            \"display\": [\n" +
+                    "              {\n" +
+                    "                \"name\": \"Given Name\",\n" +
+                    "                \"locale\": \"en\"\n" +
+                    "              }\n" +
+                    "            ]\n" +
+                    "          },\n" +
+                    "          \"age\": {\n" +
+                    "            \"display\": [\n" +
+                    "              {\n" +
+                    "                \"name\": \"Age\",\n" +
+                    "                \"locale\": \"en\"\n" +
+                    "              }\n" +
+                    "            ]\n" +
+                    "          }\n" +
+                    "        }\n" +
+                    "      },\n" +
+                    "      \"display\": [\n" +
+                    "        {\n" +
+                    "          \"name\": \"Mock Verifiable Credential by e-Signet\",\n" +
+                    "          \"locale\": \"en\",\n" +
+                    "          \"logo\": {\n" +
+                    "            \"url\": \"http://localhost:8088/logo.png\",\n" +
+                    "            \"alt_text\": \"a square logo of a MOSIP\"\n" +
+                    "          },\n" +
+                    "          \"background_color\": \"#12107c\",\n" +
+                    "          \"text_color\": \"#FFFFFF\"\n" +
+                    "        }\n" +
+                    "      ]\n" +
+                    "    }\n" +
+                    "  ]\n" +
+                    "}";
+            System.out.println("jsonResponse>>>>>>>>"+jsonResponse);
+            CredentialIssuerWellKnownResponse response = new ObjectMapper().readValue(jsonResponse, CredentialIssuerWellKnownResponse.class);
             if (response == null) {
                 throw new ApiNotAccessibleException();
             }
