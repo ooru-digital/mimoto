@@ -108,9 +108,6 @@ public class Utilities {
     @Value("${mosip.openid.issuers}")
     private String getIssuersConfigJson;
 
-    @Value("${mosip.openid.issuer.credentialSupported}")
-    private String getIssuerCredentialSupportedJson;
-
     @Value("${mosip.openid.htmlTemplate}")
     private String getCredentialSupportedHtml;
 
@@ -122,18 +119,14 @@ public class Utilities {
 
     private String issuersConfigJsonString = null;
 
-    private String credentialsSupportedJsonString = null;
-
     private String credentialTemplateHtmlString = null;
 //    uncomment for running mimoto Locally to populate the issuers json
-   public Utilities(@Value("classpath:/wellKnownIssuer/Insurance.json") Resource credentialsSupportedResource,
-                     @Value("classpath:mimoto-issuers-config.json") Resource resource,
-                     @Value("classpath:/templates/CredentialTemplate.html") Resource credentialTemplateResource) throws IOException{
-
-        issuersConfigJsonString = (Files.readString(resource.getFile().toPath()));
-        credentialsSupportedJsonString = (Files.readString(credentialsSupportedResource.getFile().toPath()));
-        credentialTemplateHtmlString = (Files.readString(credentialTemplateResource.getFile().toPath()));
-    }
+//    public Utilities(@Value("classpath:mimoto-issuers-config.json") Resource resource,
+//                     @Value("classpath:/templates/CredentialTemplate.html") Resource credentialTemplateResource) throws IOException{
+//
+//        issuersConfigJsonString = (Files.readString(resource.getFile().toPath()));
+//        credentialTemplateHtmlString = (Files.readString(credentialTemplateResource.getFile().toPath()));
+//    }
 
     public JSONObject getTemplate() throws JsonParseException, JsonMappingException, IOException {
         return objectMapper.readValue(classLoader.getResourceAsStream(defaultTemplate), JSONObject.class);
@@ -332,11 +325,6 @@ public class Utilities {
             errorMessage = errorSections[1];
         }
         return getErrorResponse(errorCode, errorMessage);
-    }
-
-    public String getCredentialsSupportedConfigJsonValue() throws IOException{
-        return (credentialsSupportedJsonString != null && !credentialsSupportedJsonString.isEmpty()) ?
-                credentialsSupportedJsonString : getJson(configServerFileStorageURL, getIssuerCredentialSupportedJson);
     }
 
     public String getCredentialSupportedTemplateString() throws IOException{
