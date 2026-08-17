@@ -1,0 +1,23 @@
+name: Production Deployment
+
+permissions:
+  contents: read
+  id-token: write
+
+on:
+  workflow_dispatch:
+jobs:
+  deploy:
+    name: Deploy mimoto To Production
+    uses: ./.github/workflows/deploy-eks.yml
+    with:
+      aws_region: ${{ vars.AWS_REGION }}
+      aws_role_to_assume: ${{ vars.PRODUCTION_GITHUB_ACTIONS_AWS_ROLE_ARN }}
+      eks_cluster_name: ${{ vars.PRODUCTION_EKS_CLUSTER_NAME }}
+      kubernetes_namespace: ${{ vars.PRODUCTION_KUBERNETES_NAMESPACE }}
+      helm_release_name: mimoto
+      helm_chart_path: deployment-configs/helm/mimoto-helm/helm/mimoto
+      deployment_configs_ref: production-main
+    secrets:
+      deployment_configs_token: ${{ secrets.DEPLOYMENT_CONFIGS_TOKEN }}
+      discord_webhook: ${{ secrets.DISCORD_PRODUCTION_BUILDS_URL }}
