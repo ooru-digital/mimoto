@@ -17,8 +17,8 @@ jobs:
       eks_cluster_name: ${{ vars.STAGING_EKS_CLUSTER_NAME }}
       kubernetes_namespace: ${{ vars.STAGING_KUBERNETES_NAMESPACE }}
       helm_release_name: mimoto
-      helm_chart_path: deployment-configs/helm/mimoto-helm/helm/mimoto
-      helm_values_file: deployment-configs/helm/mimoto-helm/helm/mimoto/values.yaml
+      helm_chart_path: deployment-configs/helm/mimoto
+      helm_values_file: deployment-configs/helm/mimoto/values.yaml
       deployment_configs_ref: main
     secrets:
       deployment_configs_token: ${{ secrets.DEPLOYMENT_CONFIGS_TOKEN }}
